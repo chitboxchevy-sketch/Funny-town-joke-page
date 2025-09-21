@@ -17,13 +17,21 @@
         .hidden {
             display: none;
         }
+
+        /* Ensure the GIF image fills the container as much as possible */
+        #gif-image {
+            width: 100%;  /* Allow the image to take full width of its container */
+            height: 100%; /* Allow the image to take full height of its container */
+            object-fit: contain; /* This will make the GIF scale down to fit without cropping, preserving aspect ratio */
+            /* If you want it to *fill* and potentially crop, use object-fit: cover; */
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white full-screen-content p-4">
 
     <div id="initial-content" class="bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-sm text-center">
         <h1 class="text-3xl font-bold mb-2">Welcome!</h1>
-        <p class="text-gray-400 mb-6">This page should play a sound and show a GIF.</p>
+        <p class="text-gray-400 mb-6">CLICK TO ENTER.</p>
         
         <button id="playButton" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800">
             Click to Enter
@@ -33,7 +41,7 @@
     </div>
 
     <div id="gif-container" class="hidden fixed inset-0 flex items-center justify-center bg-black">
-        <img id="gif-image" src="funny-town.gif" alt="A fun town animation" class="max-w-full max-h-full object-contain">
+        <img id="gif-image" src="funny-town.gif" alt="A fun town animation">
     </div>
 
     <script>
