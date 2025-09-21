@@ -4,98 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello, GitHub Pages!</title>
-    <!-- Use Tailwind CSS for easy styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom styles for a cleaner look */
-        body {
-            font-family: 'Inter', sans-serif;
+        /* Custom styles to prevent layout shifts */
+        .full-screen-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
-        /* Custom class for the GIF container */
-        .gif-container {
+        /* Hidden by default */
+        .hidden {
             display: none;
-            width: 100%;
-            height: 100vh; /* Use viewport height to make it large */
-            object-fit: contain; /* Ensures the GIF fits within the container */
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: #000; /* Black background to fill the screen */
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-4">
+<body class="bg-gray-900 text-white full-screen-content p-4">
 
-    <!-- The GIF container that will be shown after the button is clicked -->
-    <div id="gif-container" class="gif-container flex items-center justify-center">
-        <!-- The image element for the GIF -->
-        <img id="gif-image" src="funny-town.gif" alt="A fun town animation">
-    </div>
-
-    <!-- Main container for the initial content -->
     <div id="initial-content" class="bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-sm text-center">
         <h1 class="text-3xl font-bold mb-2">Welcome!</h1>
         <p class="text-gray-400 mb-6">This page should play a sound and show a GIF.</p>
         
-        <!-- A message box to provide feedback to the user -->
-        <div id="message-box" class="bg-gray-700 text-gray-300 p-4 rounded-xl mb-6 hidden"></div>
-
-        <!-- The button to manually start playback if autoplay is blocked -->
         <button id="playButton" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800">
             Click to Enter
         </button>
 
-        <!-- The hidden audio element. -->
         <audio id="myAudio" src="audio-file.mp3"></audio>
+    </div>
+
+    <div id="gif-container" class="hidden fixed inset-0 flex items-center justify-center bg-black">
+        <img id="gif-image" src="funny-town.gif" alt="A fun town animation" class="max-w-full max-h-full object-contain">
     </div>
 
     <script>
         // Get references to the HTML elements
         const audio = document.getElementById('myAudio');
         const playButton = document.getElementById('playButton');
-        const messageBox = document.getElementById('message-box');
         const initialContent = document.getElementById('initial-content');
         const gifContainer = document.getElementById('gif-container');
         
-        /**
-         * A function to show a message in the message box.
-         * @param {string} msg - The message to display.
-         * @param {string} color - The Tailwind color class for the text.
-         */
-        function showMessage(msg, color = 'text-gray-300') {
-            messageBox.textContent = msg;
-            messageBox.className = `bg-gray-700 ${color} p-4 rounded-xl mb-6`;
-            messageBox.style.display = 'block';
-        }
+        // Function to handle the start of the experience
+        function startExperience() {
+            // Hide the initial content and show the GIF
+            initialContent.classList.add('hidden');
+            gifContainer.classList.remove('hidden');
 
-        /**
-         * Function to attempt to play the audio, hide initial content, and show the GIF.
-         */
-        function tryToPlayAudioAndShowGif() {
-            audio.play()
-                .then(() => {
-                    // Playback was successful.
-                    showMessage("Audio is now playing!", "text-green-400");
-                    initialContent.style.display = 'none'; // Hide the initial content
-                    gifContainer.style.display = 'flex'; // Show the GIF container
-                })
-                .catch(error => {
-                    // Playback failed. Keep the button visible.
-                    initialContent.style.display = 'flex'; // Ensure initial content is visible
-                    showMessage("Audio couldn't play automatically. Click the button to enter.", "text-red-400");
-                    console.error("Audio playback error:", error);
-                });
+            // Play the audio
+            audio.play().catch(error => {
+                console.error("Audio playback failed:", error);
+            });
         }
 
         // Add a click event listener to the button
-        playButton.addEventListener('click', () => {
-            tryToPlayAudioAndShowGif();
-        });
+        playButton.addEventListener('click', startExperience);
 
-        // Try to autoplay the audio as soon as the page is loaded
-        window.addEventListener('load', () => {
-            tryToPlayAudioAndShowGif();
-        });
     </script>
 
 </body>
